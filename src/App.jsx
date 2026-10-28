@@ -40,51 +40,6 @@ function MapArt({ small = false }) {
 function OpeningSequence({ effects, onComplete }) {
   const [phase, setPhase] = useState('charge')
 
-  const playOpeningSound = () => {
-    try {
-      const AudioContext = window.AudioContext || window.webkitAudioContext
-      if (AudioContext) {
-        const audio = new AudioContext()
-        const thump = audio.createOscillator()
-        const thumpGain = audio.createGain()
-        thump.type = 'sine'
-        thump.frequency.setValueAtTime(118, audio.currentTime)
-        thump.frequency.exponentialRampToValueAtTime(46, audio.currentTime + 0.42)
-        thumpGain.gain.setValueAtTime(0.34, audio.currentTime)
-        thumpGain.gain.exponentialRampToValueAtTime(0.001, audio.currentTime + 0.48)
-        thump.connect(thumpGain).connect(audio.destination)
-        thump.start()
-        thump.stop(audio.currentTime + 0.5)
-        const buffer = audio.createBuffer(1, Math.ceil(audio.sampleRate * 0.55), audio.sampleRate)
-        const samples = buffer.getChannelData(0)
-        for (let i = 0; i < samples.length; i += 1) samples[i] = (Math.random() * 2 - 1) * (1 - i / samples.length)
-        const noise = audio.createBufferSource()
-        const filter = audio.createBiquadFilter()
-        const sweepGain = audio.createGain()
-        noise.buffer = buffer
-        filter.type = 'highpass'
-        filter.frequency.setValueAtTime(1800, audio.currentTime)
-        filter.frequency.exponentialRampToValueAtTime(280, audio.currentTime + 0.5)
-        sweepGain.gain.setValueAtTime(0.19, audio.currentTime)
-        sweepGain.gain.exponentialRampToValueAtTime(0.001, audio.currentTime + 0.55)
-        noise.connect(filter).connect(sweepGain).connect(audio.destination)
-        noise.start()
-        window.setTimeout(() => audio.close(), 1200)
-      }
-    } catch {
-      // Speech can still play if an audio context is unavailable.
-    }
-    if (window.speechSynthesis && window.SpeechSynthesisUtterance) {
-      window.speechSynthesis.cancel()
-      const shout = new SpeechSynthesisUtterance('Bankai!')
-      shout.lang = 'ja-JP'
-      shout.rate = 0.78
-      shout.pitch = 0.62
-      shout.volume = 1
-      window.speechSynthesis.speak(shout)
-    }
-  }
-
   useEffect(() => {
     if (!effects || window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
       onComplete()
@@ -131,7 +86,6 @@ function OpeningSequence({ effects, onComplete }) {
     </svg>
     <div className="opening-blade-trail" aria-hidden="true" />
     <div className="opening-impact" aria-hidden="true" />
-    <button className="opening-sound" onClick={playOpeningSound} aria-label="Play opening sound" title="Play opening sound"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 10v4h4l5 4V6l-5 4H4Z" /><path d="M16 9a5 5 0 0 1 0 6M18.5 6.5a9 9 0 0 1 0 11" /></svg></button>
     <button className="opening-skip" onClick={onComplete} aria-label="Skip opening animation"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5l14 14M19 5L5 19" /></svg></button>
   </div>
 }
@@ -376,6 +330,8 @@ export default function App() {
     {preferencesOpen && <PreferencesModal preferences={preferences} onUpdate={setPreferences} onClose={() => setPreferencesOpen(false)} />}
   </div></>
 }
+
+
 
 
 
