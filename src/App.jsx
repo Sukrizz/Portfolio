@@ -294,7 +294,14 @@ function isOldStarter(value) {
 
 function loadArchive() {
   const saved = readStored('elsewhere:portfolio:v1', null)
-  return saved && !isOldStarter(saved) ? saved : copy(defaultPortfolio)
+  if (!saved || isOldStarter(saved)) return copy(defaultPortfolio)
+  if (!readStored('afterimage:github-projects:v1', false)) {
+    const projects = Array.isArray(saved.projects) ? saved.projects : []
+    const imported = defaultPortfolio.projects.filter((project) => !projects.some((item) => item.id === project.id))
+    try { localStorage.setItem('afterimage:github-projects:v1', 'true') } catch {}
+    return { ...saved, projects: [...projects, ...imported] }
+  }
+  return saved
 }
 
 function loadPreferences() {
@@ -330,6 +337,7 @@ export default function App() {
     {preferencesOpen && <PreferencesModal preferences={preferences} onUpdate={setPreferences} onClose={() => setPreferencesOpen(false)} />}
   </div></>
 }
+
 
 
 
