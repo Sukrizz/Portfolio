@@ -134,3 +134,6 @@
 .theme-light .intro-copy>.eyebrow { color: #59564f; }
 .theme-light .intro-description { color: #504d48; }
 .theme-light .intro-footnote { color: #6d685f; }
+.theme-dark .stat-panel:not(.mint) { color: #111216; }
+.theme-dark .stat-panel:not(.mint) .stat-label,
+.theme-dark .stat-panel:not(.mint) button { color: #111216; }
