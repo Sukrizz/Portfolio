@@ -171,7 +171,7 @@ function Overview({ data, setActive }) {
     </section>
     <section className="overview-lower">
       <article className="panel skills-preview"><div className="panel-heading"><div><p className="eyebrow">CURRENTLY LEARNING</p><h3>Skills on my mind</h3></div><button className="text-link" onClick={() => setActive('skills')}>ALL SKILLS ↗</button></div>
-        <div className="mini-skills">{data.skills.length ? data.skills.slice(0, 3).map((skill) => <div className="mini-skill" key={skill.id}><span className="skill-glyph">{skill.icon}</span><div className="mini-skill-main"><div><strong>{skill.name}</strong><small>{skill.rank}</small></div><div className="mini-track"><i style={{ width: skill.progress + '%' }} /></div></div></div>) : <p className="inline-empty">Your board is clear. Add a skill when you’re ready.</p>}</div>
+        <div className="mini-skills">{data.skills.length ? data.skills.slice(0, 3).map((skill) => <div className="mini-skill" key={skill.id}><span className="skill-glyph">{skill.icon}</span><div className="mini-skill-main"><div><strong>{skill.name}</strong><small>{skill.rank}</small></div>{skill.progress != null && <div className="mini-track"><i style={{ width: skill.progress + '%' }} /></div>}</div></div>) : <p className="inline-empty">Your board is clear. Add a skill when you’re ready.</p>}</div>
       </article>
       <article className="panel active-quest"><div className="panel-heading"><div><p className="eyebrow">LATEST NOTE</p><h3>{latestNote?.title || 'Nothing written yet'}</h3></div><button className="text-link" onClick={() => setActive('journal')}>OPEN NOTES ↗</button></div>
         <p className="latest-note">{latestNote?.text || 'Keep a thought here when there’s one you want to return to.'}</p><div className="quest-author"><i /> {latestNote?.mood || 'YOUR LOGBOOK'}</div>
@@ -183,8 +183,8 @@ function SkillsView({ skills }) {
   return <><SectionHeading eyebrow="THINGS I’M LEARNING" title="Skill tree" subtitle="A progress board for skills I want to keep growing." />
     {skills.length ? <div className="skills-grid">{skills.map((skill, index) => <article className="panel skill-card" key={skill.id}>
       <div className="skill-card-top"><span className="skill-glyph large">{skill.icon}</span><span className="tag">{skill.category}</span><span className="skill-index">0{index + 1}</span></div>
-      <h3>{skill.name}</h3><p>{skill.detail}</p><div className="skill-rank"><span>{skill.rank}</span><span>{skill.progress}%</span></div>
-      <div className="xp-track"><i style={{ width: skill.progress + '%' }} /></div><div className="skill-foot"><span>PROGRESS</span><span>{skill.progress < 30 ? 'STARTING' : skill.progress < 70 ? 'IN PRACTICE' : 'GROWING'}</span></div>
+      <h3>{skill.name}</h3><p>{skill.detail}</p><div className="skill-rank"><span>{skill.rank}</span>{skill.progress != null && <span>{skill.progress}%</span>}</div>
+      {skill.progress != null && <><div className="xp-track"><i style={{ width: skill.progress + '%' }} /></div><div className="skill-foot"><span>PROGRESS</span><span>{skill.progress < 30 ? 'STARTING' : skill.progress < 70 ? 'IN PRACTICE' : 'GROWING'}</span></div></>}
     </article>)}</div> : <EmptyState text="Add your first skill in Edit File." />}
   </>
 }
@@ -295,13 +295,20 @@ function isOldStarter(value) {
 function loadArchive() {
   const saved = readStored('elsewhere:portfolio:v1', null)
   if (!saved || isOldStarter(saved)) return copy(defaultPortfolio)
+  let archive = saved
   if (!readStored('afterimage:github-projects:v1', false)) {
-    const projects = Array.isArray(saved.projects) ? saved.projects : []
+    const projects = Array.isArray(archive.projects) ? archive.projects : []
     const imported = defaultPortfolio.projects.filter((project) => !projects.some((item) => item.id === project.id))
+    archive = { ...archive, projects: [...projects, ...imported] }
     try { localStorage.setItem('afterimage:github-projects:v1', 'true') } catch {}
-    return { ...saved, projects: [...projects, ...imported] }
   }
-  return saved
+  if (!readStored('afterimage:github-skills:v1', false)) {
+    const skills = Array.isArray(archive.skills) ? archive.skills : []
+    const imported = defaultPortfolio.skills.filter((skill) => !skills.some((item) => item.id === skill.id))
+    archive = { ...archive, skills: [...skills, ...imported] }
+    try { localStorage.setItem('afterimage:github-skills:v1', 'true') } catch {}
+  }
+  return archive
 }
 
 function loadPreferences() {
@@ -337,6 +344,7 @@ export default function App() {
     {preferencesOpen && <PreferencesModal preferences={preferences} onUpdate={setPreferences} onClose={() => setPreferencesOpen(false)} />}
   </div></>
 }
+
 
 
 
