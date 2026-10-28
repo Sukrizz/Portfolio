@@ -121,7 +121,6 @@ function Sidebar({ active, onSelect, profile, siteName }) {
       </button>)}
     </nav>
     <div className="sidebar-spacer" />
-    <div className="side-quest"><span className="quest-orbit">✳</span><div className="nav-label">RIGHT NOW</div><strong>{profile.status}</strong><small>LEVEL {profile.level} · SAVE FILE 01</small></div>
     <div className="sidebar-profile"><div className="avatar">{(profile.name || 'Y').trim().slice(0, 1).toUpperCase()}</div>
       <div><strong>{profile.name}</strong><small>MY CORNER OF THE INTERNET</small></div>
     </div>
@@ -146,7 +145,6 @@ function SectionHeading({ eyebrow, title, subtitle }) {
 
 function Overview({ data, setActive }) {
   const { profile } = data
-  const xpPercent = Math.min(100, Math.round((profile.xp / Math.max(1, profile.nextLevelXp)) * 100))
   const focusSkill = data.skills[0]
   const latestProject = data.projects[0]
   const latestNote = data.journal[0]
@@ -154,18 +152,13 @@ function Overview({ data, setActive }) {
     <section className="hero-card">
       <div className="hero-copy">{profile.status && <div className="hero-status"><i /> {profile.status}</div>}
         <h1>{profile.title}</h1><p className="hero-bio">{profile.bio}</p>
-        <div className="hero-meta">{profile.location && <span>⌖ {profile.location}</span>}<span>LEVEL {profile.level}</span></div>
+        {profile.location && <div className="hero-meta"><span>⌖ {profile.location}</span></div>}
       </div>
       <div className="hero-art"><div className="hero-art-label">A MAP THAT CAN CHANGE <span>↗</span></div><MapArt small />
-        <div className="hero-art-coord">THE NEXT THING<br />IS UP TO YOU</div><div className="hero-art-stamp">{String(profile.level).padStart(2, '0')}<small>LVL</small></div>
+        <div className="hero-art-coord">THE NEXT THING<br />IS UP TO YOU</div>
       </div>
     </section>
     <section className="dashboard-grid">
-      <article className="panel level-panel"><div className="panel-heading"><div><p className="eyebrow">SAVE FILE / GROWTH</p><h3>Level {profile.level} <span>·</span> In progress</h3></div><span className="panel-symbol">↗</span></div>
-        <div className="level-meta"><span>EXPERIENCE POINTS</span><span>{profile.xp} <i>/</i> {profile.nextLevelXp} XP</span></div>
-        <div className="xp-track"><i style={{ width: xpPercent + '%' }} /></div>
-        <div className="level-footer"><span>THE NEXT LEVEL IS {profile.level + 1}</span><span>{Math.max(0, profile.nextLevelXp - profile.xp)} XP TO GO</span></div>
-      </article>
       <article className="panel stat-panel"><span className="stat-symbol">✳</span><span className="stat-label">ON THE SKILL TREE</span><strong className="stat-name">{focusSkill?.name || 'Add your first skill'}</strong><button onClick={() => setActive('skills')}>SEE SKILLS <b>↗</b></button></article>
       <article className="panel stat-panel mint"><span className="stat-symbol">◈</span><span className="stat-label">ON THE WORKBENCH</span><strong className="stat-name">{latestProject?.name || 'Add your first project'}</strong><button onClick={() => setActive('projects')}>SEE PROJECTS <b>↗</b></button></article>
     </section>
@@ -309,6 +302,13 @@ function loadArchive() {
     archive = { ...archive, skills: [...skills, ...imported] }
     try { localStorage.setItem('afterimage:github-skills:v1', 'true') } catch {}
   }
+  if (archive.profile) {
+    const profile = { ...archive.profile }
+    delete profile.level
+    delete profile.xp
+    delete profile.nextLevelXp
+    archive = { ...archive, profile }
+  }
   return archive
 }
 
@@ -347,6 +347,8 @@ export default function App() {
     {preferencesOpen && <PreferencesModal preferences={preferences} onUpdate={setPreferences} onClose={() => setPreferencesOpen(false)} />}
   </div></>
 }
+
+
 
 
 
