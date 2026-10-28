@@ -90,8 +90,8 @@ function OpeningSequence({ effects, onComplete }) {
   </div>
 }
 
-function Intro({ siteName, effects, onEnter }) {
-  return <main className={'intro-screen ' + (!effects ? 'no-effects' : '')}>
+function Intro({ siteName, effects, theme, onEnter }) {
+  return <main className={'intro-screen theme-' + theme + ' ' + (!effects ? 'no-effects' : '')}>
     <div className="intro-topline"><span className="wordmark">{String(siteName || 'A').slice(0, 1).toUpperCase()}<span>·</span></span><span>PERSONAL ARCHIVE / VOL. 01</span><span className="online"><i /> OPEN FILE</span></div>
     <div className="intro-layout">
       <section className="intro-copy">
@@ -279,6 +279,7 @@ function PreferencesModal({ preferences, onUpdate, onClose }) {
     <section className="preferences-modal" role="dialog" aria-modal="true" aria-labelledby="preferences-title">
       <div className="modal-head"><div><p className="eyebrow">TUNE THE PAGE</p><h2 id="preferences-title">Preferences</h2></div><button className="icon-button close-button" onClick={onClose} aria-label="Close preferences">×</button></div>
       <div className="preference-row"><div><strong>Ambient motion</strong><p>Small movement in the route illustration.</p></div><button className={'toggle ' + (preferences.effects ? 'on' : '')} onClick={() => onUpdate({ ...preferences, effects: !preferences.effects })} role="switch" aria-checked={preferences.effects} aria-label="Toggle ambient motion"><i /></button></div>
+      <div className="preference-row"><div><strong>Theme</strong><p>Choose a dark or light page.</p></div><div className="theme-options"><button className={preferences.theme !== 'light' ? 'selected' : ''} onClick={() => onUpdate({ ...preferences, theme: 'dark' })} aria-pressed={preferences.theme !== 'light'}>DARK</button><button className={preferences.theme === 'light' ? 'selected' : ''} onClick={() => onUpdate({ ...preferences, theme: 'light' })} aria-pressed={preferences.theme === 'light'}>LIGHT</button></div></div>
       <div className="preference-row"><div><strong>Accent color</strong><p>Choose the small flash of color.</p></div><div className="accent-options">{['orange', 'violet', 'teal'].map((accent) => <button key={accent} className={'accent-swatch ' + accent + ' ' + (preferences.accent === accent ? 'selected' : '')} onClick={() => onUpdate({ ...preferences, accent })} aria-label={'Set ' + accent + ' accent'} aria-pressed={preferences.accent === accent} />)}</div></div>
       <div className="preference-row"><div><strong>Replay the opening</strong><p>Return to the first page.</p></div><button className="subtle-button" onClick={() => { onUpdate({ ...preferences, hasEntered: false }); onClose() }}>REPLAY ↗</button></div>
       <div className="preferences-note"><span>◉</span> Your preferences stay on this device.</div>
@@ -315,7 +316,8 @@ function loadPreferences() {
   const saved = readStored('elsewhere:preferences:v1', null)
   if (!saved) return copy(defaultPreferences)
   const previousArchive = readStored('elsewhere:portfolio:v1', null)
-  return isOldStarter(previousArchive) && saved.accent === 'violet' ? { ...saved, accent: 'orange' } : saved
+  const preferences = { ...copy(defaultPreferences), ...saved, theme: saved.theme === 'light' ? 'light' : 'dark' }
+  return isOldStarter(previousArchive) && preferences.accent === 'violet' ? { ...preferences, accent: 'orange' } : preferences
 }
 export default function App() {
   const [data, setData] = useState(loadArchive)
@@ -326,14 +328,15 @@ export default function App() {
   const [preferencesOpen, setPreferencesOpen] = useState(false)
   const accent = ['orange', 'violet', 'teal', 'amber'].includes(preferences.accent) ? preferences.accent : 'orange'
   const siteName = data.siteName || 'Afterimage'
+  const theme = preferences.theme === 'light' ? 'light' : 'dark'
 
   useEffect(() => { savePortfolio(data) }, [data])
   useEffect(() => { savePreferences(preferences) }, [preferences])
   useEffect(() => { document.title = siteName + ' — Personal Archive' }, [siteName])
 
-  if (!preferences.hasEntered) return <>{loading && <OpeningSequence effects={preferences.effects} onComplete={() => setLoading(false)} />}<div className={'app-shell accent-' + accent}><Intro siteName={siteName} effects={preferences.effects} onEnter={() => setPreferences((current) => ({ ...current, hasEntered: true }))} /></div></>
+  if (!preferences.hasEntered) return <>{loading && <OpeningSequence effects={preferences.effects} onComplete={() => setLoading(false)} />}<div className={'app-shell theme-' + theme + ' accent-' + accent}><Intro siteName={siteName} effects={preferences.effects} theme={theme} onEnter={() => setPreferences((current) => ({ ...current, hasEntered: true }))} /></div></>
 
-  return <>{loading && <OpeningSequence effects={preferences.effects} onComplete={() => setLoading(false)} />}<div className={'app-shell accent-' + accent + (!preferences.effects ? ' no-effects' : '')}>
+  return <>{loading && <OpeningSequence effects={preferences.effects} onComplete={() => setLoading(false)} />}<div className={'app-shell theme-' + theme + ' accent-' + accent + (!preferences.effects ? ' no-effects' : '')}>
     <div className="ambient ambient-one" /><div className="ambient ambient-two" /><div className="site-grid" />
     <div className="app-layout"><Sidebar active={active} onSelect={setActive} profile={data.profile} siteName={siteName} /><main className="main-area">
       <Topbar active={active} onEdit={() => setEditorOpen(true)} onPrefs={() => setPreferencesOpen(true)} onReplay={() => setPreferences((current) => ({ ...current, hasEntered: false }))} />
@@ -344,6 +347,7 @@ export default function App() {
     {preferencesOpen && <PreferencesModal preferences={preferences} onUpdate={setPreferences} onClose={() => setPreferencesOpen(false)} />}
   </div></>
 }
+
 
 
 
