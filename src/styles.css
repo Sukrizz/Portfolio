@@ -58,3 +58,79 @@
 
 
 
+
+/* Theme preferences */
+.app-shell.theme-dark {
+  --paper: #111216;
+  --paper-light: #1b1c21;
+  --ink: #f0ece3;
+  --muted: #aaa69e;
+  --line: rgba(240,236,227,.2);
+  background-color: var(--paper);
+  background-image: radial-gradient(rgba(240,236,227,.1) .7px,transparent .7px);
+}
+.theme-dark .sidebar { background: #090a0d; color: var(--ink); border-color: var(--line); }
+.theme-dark .brand { color: var(--ink); }
+.theme-dark .brand-emblem { color: #111216; border-color: var(--ink); }
+.theme-dark .brand-name small, .theme-dark .sidebar-profile small { color: #aaa69e; }
+.theme-dark .nav-item { color: #c7c2ba; }
+.theme-dark .nav-item:hover { color: var(--ink); }
+.theme-dark .nav-item.active { color: var(--lime); }
+.theme-dark .breadcrumb { color: #aaa69e; }
+.theme-dark .save-indicator { color: #aaa69e; }
+.theme-dark .icon-button { border-color: var(--ink); color: var(--ink); }
+.theme-dark .hero-bio { color: #c9c2b8; }
+.theme-dark .hero-meta { color: #c4bdb0; }
+.theme-dark .hero-meta span:last-child { background: #f0ece3; color: #111216; }
+.theme-dark .hero-art { border-color: var(--line); }
+.theme-dark .level-meta, .theme-dark .level-footer { color: #aaa69e; }
+.theme-dark .level-meta i { color: #77736a; }
+.theme-dark .level-meta span:last-child, .theme-dark .level-footer span:last-child { color: var(--ink); }
+.theme-dark .xp-track, .theme-dark .mini-track { background: #34353b; border-color: #73747a; }
+.theme-dark .stat-label { color: #c4bdb0; }
+.theme-dark .stat-panel button { color: #f0ece3; }
+.theme-dark .stat-panel.mint { background: #25262b; }
+.theme-dark .stat-panel.mint:after { color: rgba(240,236,227,.1); }
+.theme-dark .text-link { color: #e0dbd2; }
+.theme-dark .mini-skill-main small { color: #aaa69e; }
+.theme-dark .quest-quote { color: #e0dbd2; }
+.theme-dark .quest-author { color: #aaa69e; }
+.theme-dark .latest-note { color: #c9c2b8; }
+.theme-dark .inline-empty { color: #aaa69e; }
+.theme-dark .site-footer { color: #aaa69e; }
+.theme-dark .eyebrow { color: #bcb6ad; }
+.theme-dark .section-subtitle { color: #c0bbb2; }
+.theme-dark .skill-index { color: #aaa69e; }
+.theme-dark .skill-card>p, .theme-dark .project-copy>p:not(.eyebrow), .theme-dark .timeline-card p, .theme-dark .journal-body p { color: #c7c2ba; }
+.theme-dark .skill-rank { color: #e0dbd2; }
+.theme-dark .skill-foot { color: #aaa69e; }
+.theme-dark .skill-foot span:last-child { color: #e0dbd2; }
+.theme-dark .timeline-node.future { color: #aaa69e; }
+.theme-dark .timeline-date span { color: #aaa69e; }
+.theme-dark .journal-index span, .theme-dark .journal-meta { color: #aaa69e; }
+.theme-dark .empty-state { color: #c7c2ba; }
+.theme-dark .editor-modal, .theme-dark .preferences-modal { background: #18191e; }
+.theme-dark .modal-intro { color: #c0bbb2; }
+.theme-dark .editor-toolbar>span, .theme-dark .editor-add-row>span { color: #aaa69e; }
+.theme-dark .preference-row p, .theme-dark .preferences-note { color: #aaa69e; }
+.theme-dark .toggle { background: #34353b; border-color: #77777e; }
+.theme-dark .toggle.on { background: var(--lime); }
+.theme-dark .accent-swatch { border-color: #a8a39a; }
+.theme-dark .accent-swatch.selected { outline-color: var(--ink); }
+.theme-dark .reset-button { color: #ffb3a5; }
+.theme-dark .editor-message.error { color: #ff9ca4; }
+.theme-dark .editor-message.success { color: #8bd5aa; }
+.theme-options { display: flex; gap: 5px; border: 1px solid var(--ink); padding: 3px; }
+.theme-options button { border: 0; background: transparent; color: var(--muted); padding: 6px 9px; font: 8px var(--mono); letter-spacing: .05em; }
+.theme-options button.selected { background: var(--ink); color: var(--paper); }
+.theme-dark .theme-options { border-color: #77777e; }
+.theme-dark .theme-options button { color: #c7c2ba; }
+.theme-dark .theme-options button.selected { background: var(--ink); color: var(--paper); }
+.intro-screen.theme-light { background: var(--paper); color: var(--ink); }
+.intro-screen.theme-light:before { opacity: .35; }
+.intro-screen.theme-light:after { background: rgba(241,90,59,.08); }
+.theme-light .intro-topline, .theme-light .intro-bottom { border-color: rgba(25,25,27,.2); color: #625e57; }
+.theme-light .wordmark, .theme-light .online { color: var(--ink); }
+.theme-light .intro-copy>.eyebrow { color: #59564f; }
+.theme-light .intro-description { color: #504d48; }
+.theme-light .intro-footnote { color: #6d685f; }
