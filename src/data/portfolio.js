@@ -55,7 +55,8 @@ export const defaultPortfolio = {
   journal: [],
 }
 
-export const defaultPreferences = { hasEntered: false, effects: true, accent: 'orange' }
+export const defaultPreferences = { hasEntered: false, effects: true, accent: 'orange', theme: 'dark' }
+
 
 
 
