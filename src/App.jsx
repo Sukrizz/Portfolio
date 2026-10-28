@@ -280,7 +280,7 @@ function PreferencesModal({ preferences, onUpdate, onClose }) {
       <div className="modal-head"><div><p className="eyebrow">TUNE THE PAGE</p><h2 id="preferences-title">Preferences</h2></div><button className="icon-button close-button" onClick={onClose} aria-label="Close preferences">×</button></div>
       <div className="preference-row"><div><strong>Ambient motion</strong><p>Small movement in the route illustration.</p></div><button className={'toggle ' + (preferences.effects ? 'on' : '')} onClick={() => onUpdate({ ...preferences, effects: !preferences.effects })} role="switch" aria-checked={preferences.effects} aria-label="Toggle ambient motion"><i /></button></div>
       <div className="preference-row"><div><strong>Theme</strong><p>Choose a dark or light page.</p></div><div className="theme-options"><button className={preferences.theme !== 'light' ? 'selected' : ''} onClick={() => onUpdate({ ...preferences, theme: 'dark' })} aria-pressed={preferences.theme !== 'light'}>DARK</button><button className={preferences.theme === 'light' ? 'selected' : ''} onClick={() => onUpdate({ ...preferences, theme: 'light' })} aria-pressed={preferences.theme === 'light'}>LIGHT</button></div></div>
-      <div className="preference-row"><div><strong>Accent color</strong><p>Choose the small flash of color.</p></div><div className="accent-options">{['orange', 'violet', 'teal'].map((accent) => <button key={accent} className={'accent-swatch ' + accent + ' ' + (preferences.accent === accent ? 'selected' : '')} onClick={() => onUpdate({ ...preferences, accent })} aria-label={'Set ' + accent + ' accent'} aria-pressed={preferences.accent === accent} />)}</div></div>
+      <div className="preference-row"><div><strong>Accent color</strong><p>Choose the small flash of color.</p></div><div className="accent-options">{['orange', 'violet', 'amber'].map((accent) => <button key={accent} className={'accent-swatch ' + accent + ' ' + (preferences.accent === accent ? 'selected' : '')} onClick={() => onUpdate({ ...preferences, accent })} aria-label={'Set ' + accent + ' accent'} aria-pressed={preferences.accent === accent} />)}</div></div>
       <div className="preference-row"><div><strong>Replay the opening</strong><p>Return to the first page.</p></div><button className="subtle-button" onClick={() => { onUpdate({ ...preferences, hasEntered: false }); onClose() }}>REPLAY ↗</button></div>
       <div className="preferences-note"><span>◉</span> Your preferences stay on this device.</div>
     </section>
@@ -316,7 +316,7 @@ function loadPreferences() {
   const saved = readStored('elsewhere:preferences:v1', null)
   if (!saved) return copy(defaultPreferences)
   const previousArchive = readStored('elsewhere:portfolio:v1', null)
-  const preferences = { ...copy(defaultPreferences), ...saved, theme: saved.theme === 'light' ? 'light' : 'dark' }
+  const preferences = { ...copy(defaultPreferences), ...saved, accent: ['orange', 'violet', 'amber'].includes(saved.accent) ? saved.accent : 'orange', theme: saved.theme === 'light' ? 'light' : 'dark' }
   return isOldStarter(previousArchive) && preferences.accent === 'violet' ? { ...preferences, accent: 'orange' } : preferences
 }
 export default function App() {
@@ -326,7 +326,7 @@ export default function App() {
   const [active, setActive] = useState('overview')
   const [editorOpen, setEditorOpen] = useState(false)
   const [preferencesOpen, setPreferencesOpen] = useState(false)
-  const accent = ['orange', 'violet', 'teal', 'amber'].includes(preferences.accent) ? preferences.accent : 'orange'
+  const accent = ['orange', 'violet', 'amber'].includes(preferences.accent) ? preferences.accent : 'orange'
   const siteName = data.siteName || 'Afterimage'
   const theme = preferences.theme === 'light' ? 'light' : 'dark'
 
@@ -347,6 +347,7 @@ export default function App() {
     {preferencesOpen && <PreferencesModal preferences={preferences} onUpdate={setPreferences} onClose={() => setPreferencesOpen(false)} />}
   </div></>
 }
+
 
 
 
