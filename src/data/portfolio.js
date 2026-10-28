@@ -13,12 +13,34 @@ export const defaultPortfolio = {
     status: '',
   },
   skills: [],
-  projects: [],
+  projects: [
+    {
+      id: 'backlog-gaming-sommelier',
+      name: 'The Backlog Gaming Sommelier',
+      type: 'AI + GAME DISCOVERY',
+      status: 'In progress',
+      color: 'violet',
+      description: 'A game recommendation app that connects a Steam backlog with available time and mood, using a FastAPI backend and Streamlit interface.',
+      tags: ['Python', 'FastAPI', 'Streamlit', 'Steam API', 'Gemini'],
+      link: 'https://github.com/Sukrizz/Backlog-Protocol',
+    },
+    {
+      id: 'leetcode-journey',
+      name: 'LeetCode Journey',
+      type: 'ALGORITHM PRACTICE',
+      status: 'Ongoing',
+      color: 'teal',
+      description: 'A growing collection of C++ solutions to data-structure and algorithm problems. The latest visible solution is problem 1190, Reverse Substrings Between Each Pair of Parentheses.',
+      tags: ['C++', 'Data Structures', 'Algorithms', 'LeetCode'],
+      link: 'https://github.com/Sukrizz/Leetcode-Journey',
+    },
+  ],
   milestones: [],
   journal: [],
 }
 
 export const defaultPreferences = { hasEntered: false, effects: true, accent: 'orange' }
+
 
 
 
