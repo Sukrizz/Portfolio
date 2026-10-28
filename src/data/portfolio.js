@@ -45,7 +45,7 @@ export const defaultPortfolio = {
       name: 'LeetCode Journey',
       type: 'ALGORITHM PRACTICE',
       status: 'Ongoing',
-      color: 'teal',
+      color: 'violet',
       description: 'A growing collection of C++ solutions to data-structure and algorithm problems. The latest visible solution is problem 1190, Reverse Substrings Between Each Pair of Parentheses.',
       tags: ['C++', 'Data Structures', 'Algorithms', 'LeetCode'],
       link: 'https://github.com/Sukrizz/Leetcode-Journey',
@@ -56,6 +56,7 @@ export const defaultPortfolio = {
 }
 
 export const defaultPreferences = { hasEntered: false, effects: true, accent: 'orange', theme: 'dark' }
+
 
 
 
